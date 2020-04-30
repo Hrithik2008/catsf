@@ -1,3 +1,7 @@
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player, function (sprite, otherSprite) {
+    projectile.destroy(effects.fire, 500)
+})
+let projectile: Sprite = null
 let Table = sprites.create(img`
 . . c c c c c c c c c c c c c c c c c c c c c c c c c c c c . . 
 . b 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 . . 
@@ -66,8 +70,16 @@ let Tree = sprites.create(img`
 . . . . . . . . . . . . . . . f e e f c e . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . f c e e e c . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . f f c e e c . . . . . . . . . . . . . . . 
-`, SpriteKind.Player)
-let Apple = sprites.create(img`
+`, SpriteKind.Enemy)
+Table.setPosition(90, 100)
+controller.moveSprite(Table, 100, 0)
+Tree.setPosition(Math.randomRange(-50, 50), 20)
+info.setScore(0)
+info.startCountdown(60)
+Table.setFlag(SpriteFlag.StayInScreen, true)
+Tree.setFlag(SpriteFlag.StayInScreen, true)
+forever(function () {
+    projectile = sprites.createProjectileFromSprite(img`
 . . . . . . . e c 7 . . . . . . 
 . . . . e e e c 7 7 e e . . . . 
 . . c e e e e c 7 e 2 2 e e . . 
@@ -84,7 +96,7 @@ c e e 2 2 2 2 2 2 2 2 2 2 4 2 e
 . . 2 e e 2 2 2 2 2 4 4 2 e . . 
 . . . 2 2 e e 4 4 4 2 e e . . . 
 . . . . . 2 2 e e e e . . . . . 
-`, SpriteKind.Player)
-controller.moveSprite(Table, 100, 0)
-Table.setPosition(90, 100)
-Tree.setPosition(90, 20)
+`, Tree, Math.randomRange(-75, 75), 35)
+    info.changeScoreBy(1)
+    pause(2000)
+})
